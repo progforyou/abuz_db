@@ -79,7 +79,7 @@ app.post('/login', async (req, res) => {
 
 app.post('/setRat', async (req, res) => {
     let ratData = res.ratData;
-    let name = req.body.name;
+    let name = req.body.login;
     let password = req.body.password;
     if (req.header("Authorization") === process.env.AUTHORIZATION){
         let user = await getUser(name, password)
