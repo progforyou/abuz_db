@@ -58,6 +58,9 @@ app.post('/login', async (req, res) => {
     let name = req.body.name;
     let password = req.body.password;
     let machineID = req.body.machineID
+    console.log(typeof process.env.AUTHORIZATION)
+    console.log(req.header("Authorization") === process.env.AUTHORIZATION);
+    console.log(req.header("Authorization"))
     if (req.header("Authorization") === process.env.AUTHORIZATION){
         let user = await getUser(name, password)
         console.log(user)
