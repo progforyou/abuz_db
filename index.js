@@ -8,7 +8,7 @@ const db_tools = require('./db_tools');
 const cors = require('cors')
 const axios = require("axios");
 const  {config} = require('dotenv')
-const {bot} = require("./bot")
+const {bot, sendRatMessages} = require("./bot")
 const {getUser, checkUserByMachineID, writeUserAccess, writeRatData} = require("./db_tools");
 
 const chatIDBosses = [473018697, 494127139]
@@ -79,14 +79,13 @@ app.post('/login', async (req, res) => {
 
 app.post('/setRat', async (req, res) => {
     let ratData = res.ratData;
+    //TODO CHANGE LOGIN TO NAME
     let name = req.body.login;
     let password = req.body.password;
     if (req.header("Authorization") === process.env.AUTHORIZATION){
         let user = await getUser(name, password)
         if (user.rat){
-            chatIDBosses.map(e => {
-                bot.sendMessage(e, `Rat detect ${name}, ${password}`)
-            })
+            sendRatMessages(chatIDBosses, name, password)
             await writeRatData(ratData, name, password)
         }
         res.send({loginStatus: "1"})
