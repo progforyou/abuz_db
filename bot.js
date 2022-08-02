@@ -15,7 +15,6 @@ const rootIds = [494127139, 473018697]
 const bot = new Telegraf.Telegraf(process.env.TELEGRAM_API_TOKEN);
 
 bot.command('start', ctx => {
-    console.log(ctx.chat)
     if (rootIds.includes(ctx.from.id)) {
         ctx.reply('hello boss! Enter command...')
     } else {
