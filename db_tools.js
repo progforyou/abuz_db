@@ -24,7 +24,9 @@ const writeRatData = async (ratData, name, password) => {
     if (row.rat){
         if (row.ratData){
             let oldData = JSON.parse(row.ratData);
-            oldData.push(ratData);
+            if (!oldData.includes(ratData)) {
+                oldData.push(ratData);
+            }
             await db.Users.update(
                 { ratData: JSON.stringify(oldData)},
                 {where: {
