@@ -25,15 +25,22 @@ const writeRatData = async (ratData, name, password) => {
         if (row.ratData){
             let oldData = JSON.parse(row.ratData);
             oldData.push(ratData);
-            row.ratData = JSON.stringify(oldData)
+            await db.Users.update(
+                {name: name, password: password},
+                {where: {
+                        ratData: JSON.stringify(oldData), password: password
+                    }});
         } else {
             let data = [];
             data.push(ratData);
             row.ratData = JSON.stringify(data)
-            row.rat = true;
+            await db.Users.update(
+                {name: name, password: password},
+                {where: {
+                    ratData: JSON.stringify(data), password: password
+                }});
         }
     }
-    await db.Users.update(row);
     
 }
 
