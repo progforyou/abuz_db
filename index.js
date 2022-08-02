@@ -74,7 +74,7 @@ app.post('/login', async (req, res) => {
         }
     }
     
-    res.send({loginStatus: "0"})
+    return res.send({loginStatus: "0"})
 })
 
 app.post('/setRat', async (req, res) => {
@@ -90,10 +90,10 @@ app.post('/setRat', async (req, res) => {
             })
             await writeRatData(ratData, name, password)
         }
-        res.send({loginStatus: "1"})
+        return res.send({loginStatus: "1"})
     }
 
-    res.send({loginStatus: "0"})
+    return res.send({loginStatus: "0"})
 })
 
 app.listen(port, () => {
