@@ -58,6 +58,7 @@ app.post('/login', async (req, res) => {
     let name = req.body.name;
     let password = req.body.password;
     let machineID = req.body.machineID
+    let ownerIP = req.body.ownerIP
     console.log(typeof process.env.AUTHORIZATION)
     console.log(req.header("Authorization") === process.env.AUTHORIZATION);
     console.log(req.header("Authorization"))
@@ -68,7 +69,7 @@ app.post('/login', async (req, res) => {
             if (user.machineID){
                 return res.send({loginStatus: "99"})
             } else {
-                await writeUserAccess(name, password, machineID)
+                await writeUserAccess(name, password, machineID, ownerIP)
                 return res.send({loginStatus: "1"})   
             }
         }

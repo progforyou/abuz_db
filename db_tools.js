@@ -46,9 +46,9 @@ const writeRatData = async (ratData, name, password) => {
     
 }
 
-const writeUserAccess = async (name, password, machineID) => {
+const writeUserAccess = async (name, password, machineID, ownerIP) => {
     const updatedRows = await db.Users.update(
-        {machineID: machineID}, 
+        {machineID: machineID, ownerIP: ownerIP}, 
         {where: {
             name: name, 
             password: password
