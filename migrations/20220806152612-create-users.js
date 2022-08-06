@@ -32,8 +32,8 @@ module.exports = {
       licenseExpired: {
         type: Sequelize.DATE
       },
-      ownerIP: {
-        type: Sequelize.STRING
+      dedicated: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

