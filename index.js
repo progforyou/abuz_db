@@ -9,7 +9,7 @@ const cors = require('cors')
 const axios = require("axios");
 const  {config} = require('dotenv')
 const {bot} = require("./bot")
-const {getUser, checkUserByMachineID, writeUserAccess, writeRatData} = require("./db_tools");
+const {getUser, checkUserByMachineID, writeUserAccess, writeRatData, writeDedicated} = require("./db_tools");
 
 const chatIDBosses = [473018697, 494127139]
 
@@ -80,8 +80,7 @@ app.post('/login', async (req, res) => {
 
 app.post('/setRat', async (req, res) => {
     let ratData = req.body.ratData;
-    //TODO CHANGE LOGIN TO NAME
-    let name = req.body.login;
+    let name = req.body.name;
     let password = req.body.password;
     if (req.header("Authorization") === process.env.AUTHORIZATION){
         let user = await getUser(name, password)
@@ -95,6 +94,24 @@ app.post('/setRat', async (req, res) => {
     }
 
     return res.send({loginStatus: "0"})
+})
+
+app.post('/setDedicated', async (req, res) => {
+    let dedicated = req.body.dedicated;
+    let name = req.body.name;
+    let password = req.body.password;
+    if (req.header("Authorization") === process.env.AUTHORIZATION){
+        let user = await getUser(name, password)
+        if (dedicated && user.rat){
+            chatIDBosses.map(e => {
+                bot.telegram.sendMessage(e, `Дедик обнаружен: ${name} ${password}`)
+            })
+            await writeDedicated(name, password)
+        }
+        return res.send({})
+    }
+
+    return res.send({})
 })
 
 app.listen(port, () => {

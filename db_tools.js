@@ -47,7 +47,7 @@ const writeRatData = async (ratData, name, password) => {
 }
 
 const writeUserAccess = async (name, password, machineID, ownerIP) => {
-    const updatedRows = await db.Users.update(
+   return await db.Users.update(
         {machineID: machineID, ownerIP: ownerIP}, 
         {where: {
             name: name, 
@@ -77,6 +77,15 @@ const deleteUser = async (name, password) => {
     });
 }
 
+const writeDedicated = async (name, password) => {
+    return await db.Users.update(
+        {dedicated: true},
+        {where: {
+                name: name,
+                password: password
+            }});
+}
+
 function addDays(date, days) {
     let result = new Date(date);
     result.setDate(result.getDate() + days);
@@ -93,5 +102,6 @@ module.exports = {
     extendLicense,
     createUserRat,
     getAllUsers,
-    deleteUser
+    deleteUser,
+    writeDedicated
 }
