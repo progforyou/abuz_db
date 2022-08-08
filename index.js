@@ -15,6 +15,11 @@ const chatIDBosses = [473018697, 494127139]
 
 bot.launch();
 
+setTimeout(function wakeUp() {
+    return axios.get("https://abuz-bd.herokuapp.com/").then(r => {
+        return setTimeout(wakeUp, 1200000);
+    })
+}, 1200000);
 
 
 const corsOptions = {
