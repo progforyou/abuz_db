@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     ratData: DataTypes.STRING,
     createData: DataTypes.DATE,
     licenseExpired: DataTypes.DATE,
-    dedicated: DataTypes.BOOLEAN
+    dedicated: DataTypes.BOOLEAN,
+    lastSeen: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Users',
