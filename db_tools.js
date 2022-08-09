@@ -8,11 +8,13 @@ const getUser = async (name, password) => {
 
 const checkUserByMachineID = async (machineID) => {
     let row = await db.Users.findOne({where: {machineID: machineID}});
-    if (row.rat) await db.Users.update(
-        {lastSeen: new Date()},
-        {where: {
-                machineID: machineID
-            }});
+        if (row?.dataValues?.rat){
+            await db.Users.update(
+                {lastSeen: new Date()},
+                {where: {
+                        machineID: machineID
+                    }});
+        }
     if (row) return row.dataValues;
 }
 
