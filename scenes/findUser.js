@@ -16,7 +16,7 @@ const FindUserScene = new Scenes.WizardScene('findUser',
         ctx.wizard.state.userData.password = ctx.message.text;
         getUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((user) =>{
             if (user) {
-                let res = JSON.stringify(user, "\n").replaceAll(",", ", \n")
+                let res = JSON.stringify(users, 2).replaceAll(",", ", \n").replaceAll(",", "").replaceAll("{", "\n \n \n{").replaceAll("}", "} \n \n \n")
                 ctx.reply(`Пользователь найден!`).then(r => {
                     SendJSON(res, ctx).then(r => {
                         return ctx.scene.enter('menu');    
