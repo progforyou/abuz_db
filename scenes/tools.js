@@ -2,7 +2,6 @@ const {maxSize} = require("./data");
 
 
 const SendJSON = async (message, ctx) => {
-    ctx.reply("QWEQWEQWE")
     let messagesArray = ToJSONMessages(message)
     for (let i = 0; i < messagesArray.length; i++) {
         await ctx.reply(messagesArray[i])
