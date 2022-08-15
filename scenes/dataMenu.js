@@ -32,7 +32,7 @@ DataMenuScene.action(GO_TO_ALL_USERS, (ctx) => {
     getAllUsers().then((users) =>{
         if (users.length) {
             ctx.reply(`Пользователи найдены!`).then(r => {
-                let res = JSON.stringify(users, 2)
+                let res = JSON.stringify(users, 2).replaceAll(",", ", \n")
                 SendJSON(res, ctx).then(r => {
                     return ctx.scene.enter('menu');
                 })
