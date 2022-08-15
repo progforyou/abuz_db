@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     createData: DataTypes.DATE,
     licenseExpired: DataTypes.DATE,
     dedicated: DataTypes.BOOLEAN,
-    lastSeen: DataTypes.DATE
+    lastSeen: DataTypes.DATE,
+    ownerIP: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Users',

@@ -1,5 +1,6 @@
 const {Scenes, Markup} = require("telegraf");
 const {getAllUsers} = require("../db_tools");
+const {SendJSON} = require("./tools");
 
 const GO_TO_FIND_USER = "GO_TO_FIND_USER"
 const GO_TO_ALL_USERS = "GO_TO_ALL_USERS"
@@ -29,17 +30,21 @@ DataMenuScene.action(GO_TO_FILTER_USERS, (ctx) => {
 
 DataMenuScene.action(GO_TO_ALL_USERS, (ctx) => {
     getAllUsers().then((users) =>{
-        if (users.length) ctx.reply(`Пользователи найдены!`).then(r => {
-            ctx.reply(`${JSON.stringify(users)}`).then(r => {
-                ctx.scene.enter('menu');
+        if (users.length) {
+            ctx.reply(`Пользователи найдены!`).then(r => {
+                let res = JSON.stringify(users, 2)
+                SendJSON(res, ctx).then(r => {
+                    return ctx.scene.enter('menu');
+                })
             })
-        })
-        else ctx.reply(`Пусто!`).then(r => {
-            ctx.scene.enter('menu');
-        })
+        } else {
+            ctx.reply(`Пусто!`).then(r => {
+                return ctx.scene.enter('menu');
+            })
+        }
     }).catch(e => {
         ctx.reply(`Ошибка!`).then(r => {
-            ctx.scene.enter('menu');
+            return ctx.scene.enter('menu');
         })
     })
 })

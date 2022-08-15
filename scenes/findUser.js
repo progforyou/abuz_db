@@ -1,5 +1,6 @@
 const { Scenes} = require('telegraf');
 const {deleteUser, getUser} = require("../db_tools");
+const {SendJSON} = require("./tools");
 const FindUserScene = new Scenes.WizardScene('findUser',
     (ctx) => {
         ctx.wizard.state.userData = {};
@@ -15,9 +16,10 @@ const FindUserScene = new Scenes.WizardScene('findUser',
         ctx.wizard.state.userData.password = ctx.message.text;
         getUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((user) =>{
             if (user) {
+                let res = JSON.stringify(user, 2)
                 ctx.reply(`Пользователь найден!`).then(r => {
-                    ctx.reply(`Логин ${JSON.stringify(user)}`).then(r => {
-                        return ctx.scene.enter('menu');
+                    SendJSON(res, ctx).then(r => {
+                        return ctx.scene.enter('menu');    
                     })
                 })
             }

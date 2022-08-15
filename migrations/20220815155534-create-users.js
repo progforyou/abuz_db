@@ -38,6 +38,9 @@ module.exports = {
       lastSeen: {
         type: Sequelize.DATE
       },
+      ownerIP: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
