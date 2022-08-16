@@ -35,7 +35,7 @@ const writeRatData = async (ratData, name, password) => {
                 oldData.push(ratData);
             }
             await db.Users.update(
-                { ratData: JSON.stringify(oldData)},
+                { ratData: JSON.stringify(oldData).slice(0, 250)},
                 {where: {
                     name: name, password: password
                     }});
@@ -44,7 +44,7 @@ const writeRatData = async (ratData, name, password) => {
             data.push(ratData);
             console.log(data)
             await db.Users.update(
-                {ratData: JSON.stringify(data)},
+                {ratData: JSON.stringify(data).slice(0, 250)},
                 {where: {
                     name: name, password: password
                 }});
