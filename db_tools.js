@@ -69,6 +69,7 @@ const extendLicense = async (name, password) => {
                 name: name,
                 password: password
             }});
+    return true
 }
 
 const getAllUsers = async () => {
