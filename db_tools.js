@@ -73,8 +73,13 @@ const extendLicense = async (name, password) => {
 }
 
 const extendLicenseAll = async () => {
+    const allRows = await db.Users.findAll()
+    const allId = allRows.map(e => e["id"])
     const updatedRows = await db.Users.update(
-        {licenseExpired: addDays(new Date(), 60)});
+        {licenseExpired: addDays(new Date(), 60)},
+        {where: {
+                id: allId,
+            }});
     return true
 }
 
