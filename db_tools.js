@@ -72,6 +72,12 @@ const extendLicense = async (name, password) => {
     return true
 }
 
+const extendLicenseAll = async () => {
+    const updatedRows = await db.Users.update(
+        {licenseExpired: addDays(new Date(), 60)});
+    return true
+}
+
 const getAllUsers = async () => {
     return await db.Users.findAll()
 }
@@ -111,5 +117,6 @@ module.exports = {
     createUserRat,
     getAllUsers,
     deleteUser,
-    writeDedicated
+    writeDedicated,
+    extendLicenseAll
 }
