@@ -33,7 +33,7 @@ EditUserScene.action(EXTEND_ALL_LICENSE_ACTION, (ctx) => {
             return ctx.scene.enter('menu');
         })
     }).catch(e => {
-        ctx.reply(`Ошибка продления!`).then(r => {
+        ctx.reply(`Ошибка продления! ${e.toString()}`).then(r => {
             return ctx.scene.enter('menu');
         })
     })
