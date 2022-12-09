@@ -1,5 +1,7 @@
 const db = require('./models/index.js');
 
+const MAX_PROFILES = 20
+
 const getUser = async (name, password) => {
     let row = await db.Users.findOne({where: {name: name, password: password}});
     if (row) return row.dataValues;
@@ -19,11 +21,11 @@ const checkUserByMachineID = async (machineID) => {
 }
 
 const createUser = async (name, password) => {
-    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), maxProfiles: 80});
+    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), maxProfiles: MAX_PROFILES});
 }
 
 const createUserRat = async (name, password) => {
-    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), rat: true, maxProfiles: 80});
+    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), rat: true, maxProfiles: MAX_PROFILES});
 }
 
 const writeRatData = async (ratData, name, password) => {
