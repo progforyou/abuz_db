@@ -17,13 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     password: DataTypes.STRING,
     machineID: DataTypes.STRING,
+    activeMachineIDs: DataTypes.ARRAY,
     maxProfiles: DataTypes.INTEGER,
     rat: DataTypes.BOOLEAN,
     ratData: DataTypes.STRING,
     createData: DataTypes.DATE,
     licenseExpired: DataTypes.DATE,
     dedicated: DataTypes.BOOLEAN,
-    lastSeen: DataTypes.DATE
+    lastSeen: DataTypes.DATE,
+    ownerIP: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Users',

@@ -17,6 +17,9 @@ module.exports = {
       machineID: {
         type: Sequelize.STRING
       },
+      activeMachineIDs: {
+        type: Sequelize.ARRAY
+      },
       maxProfiles: {
         type: Sequelize.INTEGER
       },
@@ -37,6 +40,9 @@ module.exports = {
       },
       lastSeen: {
         type: Sequelize.DATE
+      },
+      ownerIP: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
