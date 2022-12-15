@@ -9,17 +9,11 @@ const cors = require('cors')
 const axios = require("axios");
 const  {config} = require('dotenv')
 const {bot} = require("./bot")
-const {getUser, checkUserByMachineID, writeUserAccess, writeRatData, writeDedicated} = require("./db_tools");
+const {getUser, checkUserByMachineID, writeUserAccess, writeRatData, writeDedicated, writeUser} = require("./db_tools");
 
 const chatIDBosses = [473018697, 494127139]
 
 bot.launch();
-
-setTimeout(function wakeUp() {
-    return axios.get("https://abuz-bd.herokuapp.com/").then(r => {
-        return setTimeout(wakeUp, 1200000);
-    })
-}, 1200000);
 
 
 const corsOptions = {
@@ -41,6 +35,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
+//DONE
 app.post('/checkMachine', async (req, res) => {
     let machineID = req.body.machineID
     console.log(machineID)
@@ -59,30 +54,61 @@ app.post('/checkMachine', async (req, res) => {
     return res.send({loginStatus: "0"})
 })
 
+//DONE
+app.post('/logout', async (req, res) => {
+    let name = req.body.name;
+    let password = req.body.password;
+    let machineID = req.body.machineID;
+    let user = await getUser(name, password)
+    user.activeMachineIDs = user.activeMachineIDs.split(";").filter(e => e !== machineID).join(";")
+    await writeUser(user)
+    return res.send({loginStatus: "0"})
+})
+
+//DONE
 app.post('/login', async (req, res) => {
     let name = req.body.name;
     let password = req.body.password;
     let machineID = req.body.machineID
     let ownerIP = req.body.ownerIP
-    console.log(typeof process.env.AUTHORIZATION)
-    console.log(req.header("Authorization") === process.env.AUTHORIZATION);
-    console.log(req.header("Authorization"))
     if (req.header("Authorization") === process.env.AUTHORIZATION){
         let user = await getUser(name, password)
-        console.log(user)
         if (user){
-            if (user.machineID){
-                return res.send({loginStatus: "99"})
+            if (user.machineIDs){
+                if (user.machineIDs.split(";").includes(machineID)){
+                    if (user.activeMachineIDs){
+                        let r = user.activeMachineIDs.split(";")
+                        r.push(machineID)
+                        user.activeMachineIDs = r.join(";")
+                    } else {
+                        user.activeMachineIDs = `${machineID}`
+                    }
+                } else {
+                    if ((user.machineIDs.split(";").length + 1) > user.maxMachines){
+                        return res.send({loginStatus: "99"})
+                    } else {
+                        let r = user.machineIDs.split(";")
+                        r.push(machineID)
+                        user.machineIDs = r.join(";")
+                        r = user.activeMachineIDs.split(";")
+                        r.push(machineID)
+                        user.activeMachineIDs = r.join(";")
+                    }
+                }
             } else {
-                await writeUserAccess(name, password, machineID, ownerIP)
-                return res.send({loginStatus: "1"})   
+                user.activeMachineIDs = `${machineID}`
+                user.machineIDs = `${machineID}`
             }
+            user.ownerIP = ownerIP
+            await writeUser(user)
+            return res.send({loginStatus: "1"})
         }
     }
     
     return res.send({loginStatus: "0"})
 })
 
+//DONE
 app.post('/setRat', async (req, res) => {
     let ratData = req.body.ratData;
     let name = req.body.name;
@@ -101,6 +127,7 @@ app.post('/setRat', async (req, res) => {
     return res.send({loginStatus: "0"})
 })
 
+//DONE
 app.post('/setDedicated', async (req, res) => {
     let dedicated = req.body.dedicated;
     let name = req.body.name;

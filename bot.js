@@ -8,6 +8,9 @@ const EditUserScene = require("./scenes/editUser");
 const DeleteUserScene = require("./scenes/deleteUser");
 const DataMenuScene = require("./scenes/dataMenu");
 const FindUserScene = require("./scenes/findUser");
+const CreateCustomUserScene = require("./scenes/createUser/custom");
+const CreateDefaultUserScene = require("./scenes/createUser/default");
+const CreateRatUserScene = require("./scenes/createUser/rat");
 
 
 const stage = new Telegraf.Scenes.Stage([
@@ -18,7 +21,10 @@ const stage = new Telegraf.Scenes.Stage([
     DeleteUserScene,
     DataMenuScene,
     FindUserScene,
-    ExtendLicenseScene
+    ExtendLicenseScene,
+    CreateCustomUserScene,
+    CreateDefaultUserScene,
+    CreateRatUserScene
 ]);
 
 const bot = new Telegraf.Telegraf(process.env.TELEGRAM_API_TOKEN);

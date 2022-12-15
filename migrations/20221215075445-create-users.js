@@ -1,6 +1,17 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
+    /* for add column
+    await queryInterface.addColumn(
+        'Users',
+        'test',
+        Sequelize.INTEGER
+    );*/
+    /* for remove column
+    await queryInterface.removeColumn(
+        'Users',
+        'test'
+    )*/
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -14,11 +25,26 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      machineID: {
-        type: Sequelize.STRING
+      machineIDs: {
+        type: Sequelize.TEXT,
+        get() {
+          return this.getDataValue('machineIDs').split(';')
+        },
+        set(val) {
+          this.setDataValue('machineIDs',val.join(';'));
+        },
+      },
+      maxMachines: {
+        type: Sequelize.INTEGER,
       },
       activeMachineIDs: {
-        type: Sequelize.ARRAY
+        type: Sequelize.TEXT,
+        get() {
+          return this.getDataValue('activeMachineIDs').split(';')
+        },
+        set(val) {
+          this.setDataValue('activeMachineIDs',val.join(';'));
+        },
       },
       maxProfiles: {
         type: Sequelize.INTEGER

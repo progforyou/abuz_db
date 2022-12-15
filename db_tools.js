@@ -1,6 +1,8 @@
 const db = require('./models/index.js');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
-const MAX_PROFILES = 20
+const MAX_PROFILES = 80
 
 const getUser = async (name, password) => {
     let row = await db.Users.findOne({where: {name: name, password: password}});
@@ -9,19 +11,21 @@ const getUser = async (name, password) => {
 }
 
 const checkUserByMachineID = async (machineID) => {
-    let row = await db.Users.findOne({where: {machineID: machineID}});
+    let row = await db.Users.findOne({where: {activeMachineIDs: {[Op.like]: `%${machineID};%`}}});
         if (row?.dataValues?.rat){
             await db.Users.update(
                 {lastSeen: new Date()},
-                {where: {
-                        machineID: machineID
-                    }});
+                {where: {activeMachineIDs: {[Op.like]: `%${machineID};%`}}});
         }
     if (row) return row.dataValues;
 }
 
 const createUser = async (name, password) => {
-    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), maxProfiles: MAX_PROFILES});
+    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), 30), maxProfiles: MAX_PROFILES, maxMachines: 5});
+}
+
+const createCustomUser = async (name, password, maxProfiles, maxMachines, license) => {
+    await db.Users.create({name: name, password: password, createData: new Date(), licenseExpired: addDays(new Date(), license), maxProfiles: maxProfiles, maxMachines: maxMachines});
 }
 
 const createUserRat = async (name, password) => {
@@ -53,6 +57,10 @@ const writeRatData = async (ratData, name, password) => {
         }
     }
     
+}
+
+const writeUser = async (user) => {
+    return await db.Users.update(user, {where: {id: user.id}})
 }
 
 const writeUserAccess = async (name, password, machineID, ownerIP) => {
@@ -125,5 +133,7 @@ module.exports = {
     getAllUsers,
     deleteUser,
     writeDedicated,
-    extendLicenseAll
+    extendLicenseAll,
+    createCustomUser,
+    writeUser
 }

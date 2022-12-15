@@ -16,8 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   Users.init({
     name: DataTypes.STRING,
     password: DataTypes.STRING,
-    machineID: DataTypes.STRING,
-    activeMachineIDs: DataTypes.ARRAY,
+    machineIDs: DataTypes.TEXT,
+    activeMachineIDs: DataTypes.TEXT,
+    maxMachines: DataTypes.INTEGER,
+    /* for add column test: DataTypes.INTEGER,*/
     maxProfiles: DataTypes.INTEGER,
     rat: DataTypes.BOOLEAN,
     ratData: DataTypes.STRING,
