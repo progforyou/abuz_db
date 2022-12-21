@@ -11,11 +11,11 @@ const getUser = async (name, password) => {
 }
 
 const checkUserByMachineID = async (machineID) => {
-    let row = await db.Users.findOne({where: {activeMachineIDs: {[Op.like]: `%${machineID};%`}}});
+    let row = await db.Users.findOne({where: {activeMachineIDs: {[Op.like]: `%${machineID}%`}}});
         if (row?.dataValues?.rat){
             await db.Users.update(
                 {lastSeen: new Date()},
-                {where: {activeMachineIDs: {[Op.like]: `%${machineID};%`}}});
+                {where: {activeMachineIDs: {[Op.like]: `%${machineID}%`}}});
         }
     if (row) return row.dataValues;
 }
