@@ -7,24 +7,46 @@ const DeleteUserScene = new Scenes.WizardScene('deleteUser',
         return ctx.wizard.next();
     },
     (ctx) => {
-        ctx.wizard.state.userData.name = ctx.message.text;
-        ctx.reply(`Введите пароль`, {});
-        return ctx.wizard.next();
+        if (ctx.message){
+            if (ctx.message.text === "/menu"){
+                return ctx.scene.enter('menu');
+            }
+            try{
+                ctx.wizard.state.userData.name = ctx.message.text;
+                ctx.reply(`Введите пароль`, {});
+                return ctx.wizard.next();
+            } catch (e) {
+                ctx.reply(`${e.toString()}`).then(r => {
+                    return ctx.scene.enter('menu');
+                })
+            }
+        }
     },
     (ctx) =>{
-        ctx.wizard.state.userData.password = ctx.message.text;
-        deleteUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((r) =>{
-            if (r) ctx.reply(`Пользователь удален!`).then(r => {
+        if (ctx.message){
+            if (ctx.message.text === "/menu"){
                 return ctx.scene.enter('menu');
-            })
-            else ctx.reply(`Пользователь не найден!`).then(r => {
-                return ctx.scene.enter('menu');
-            })
-        }).catch(e => {
-            ctx.reply(`Ошибка удаления!`).then(r => {
-                return ctx.scene.enter('menu');
-            })
-        })
+            }
+            try{
+                ctx.wizard.state.userData.password = ctx.message.text;
+                deleteUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((r) =>{
+                    if (r) ctx.reply(`Пользователь удален!`).then(r => {
+                        return ctx.scene.enter('menu');
+                    })
+                    else ctx.reply(`Пользователь не найден!`).then(r => {
+                        return ctx.scene.enter('menu');
+                    })
+                }).catch(e => {
+                    ctx.reply(`Ошибка удаления!`).then(r => {
+                        return ctx.scene.enter('menu');
+                    })
+                })
+            } catch (e) {
+                ctx.reply(`${e.toString()}`).then(r => {
+                    return ctx.scene.enter('menu');
+                })
+            }
+        }
     }
 );
 

@@ -8,29 +8,51 @@ const FindUserScene = new Scenes.WizardScene('findUser',
         return ctx.wizard.next();
     },
     (ctx) => {
-        ctx.wizard.state.userData.name = ctx.message.text;
-        ctx.reply(`Введите пароль`, {});
-        return ctx.wizard.next();
-    },
-    (ctx) =>{
-        ctx.wizard.state.userData.password = ctx.message.text;
-        getUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((user) =>{
-            if (user) {
-                let res = JSON.stringify(user, 2)
-                ctx.reply(`Пользователь найден!`).then(r => {
-                    SendJSON(res, ctx).then(r => {
-                        return ctx.scene.enter('menu');    
-                    })
+        if (ctx.message){
+            if (ctx.message.text === "/menu"){
+                return ctx.scene.enter('menu');
+            }
+            try{
+                ctx.wizard.state.userData.name = ctx.message.text;
+                ctx.reply(`Введите пароль`, {});
+                return ctx.wizard.next();
+            } catch (e) {
+                ctx.reply(`${e.toString()}`).then(r => {
+                    return ctx.scene.enter('menu');
                 })
             }
-            else ctx.reply(`Пользователь не найден!`).then(r => {
+        }
+    },
+    (ctx) =>{
+        if (ctx.message){
+            if (ctx.message.text === "/menu"){
                 return ctx.scene.enter('menu');
-            })
-        }).catch(e => {
-            ctx.reply(`Ошибка поиска!`).then(r => {
-                return ctx.scene.enter('menu');
-            })
-        })
+            }
+            try{
+                ctx.wizard.state.userData.password = ctx.message.text;
+                getUser(ctx.wizard.state.userData.name, ctx.wizard.state.userData.password).then((user) =>{
+                    if (user) {
+                        let res = JSON.stringify(user, 2)
+                        ctx.reply(`Пользователь найден!`).then(r => {
+                            SendJSON(res, ctx).then(r => {
+                                return ctx.scene.enter('menu');
+                            })
+                        })
+                    }
+                    else ctx.reply(`Пользователь не найден!`).then(r => {
+                        return ctx.scene.enter('menu');
+                    })
+                }).catch(e => {
+                    ctx.reply(`Ошибка поиска!`).then(r => {
+                        return ctx.scene.enter('menu');
+                    })
+                })
+            } catch (e) {
+                ctx.reply(`${e.toString()}`).then(r => {
+                    return ctx.scene.enter('menu');
+                })
+            }
+        }
     }
 );
 
