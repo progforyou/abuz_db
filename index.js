@@ -38,11 +38,16 @@ app.get('/', (req, res) => {
 //DONE
 app.post('/checkMachine', async (req, res) => {
     let machineID = req.body.machineID
+    let name = req.body.name
+    let password = req.body.password
+    if (!name || !password){
+        return res.send({loginStatus: "0"})
+    }
     console.log(machineID)
     console.log(process.env.AUTHORIZATION)
     if (req.header("Authorization") === process.env.AUTHORIZATION){
-        let user = await checkUserByMachineID(machineID)
-        if (user){
+        let user = await checkUserByMachineID(machineID, name, password)
+        if (user.name && user.password){
             if (user.licenseExpired.getTime() > new Date().getTime()){
                 return res.send({loginStatus: "2", userData: user})
             } else {
